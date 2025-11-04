@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rug Builder - Design Your Own</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #fafaf8;
+            color: #2c2c2c;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 50px 40px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 44px;
+            font-weight: 400;
+            color: #2c2c2c;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            color: #6b6b6b;
+            font-weight: 400;
+            letter-spacing: 0.8px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 500px 1fr;
+            gap: 50px;
+            align-items: flex-start;
+        }
+
+        /* Preview Section */
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            width: 500px;
+            height: 500px;
+        }
+
+        .canvas-container {
+            background: #ffffff;
+            border: 1px solid #e8e8e6;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #rugCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* HTML Summary Below Preview */
+        .summary-info {
+            background: #ffffff;
+            border: 1px solid #e8e8e6;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .summary-info-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            color: #999;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e8e8e6;
+        }
+
+        .summary-info-item {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            color: #2c2c2c;
+            line-height: 1.8;
+            margin-bottom: 6px;
+        }
+
+        .summary-info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-info-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        /* Controls Section */
+        .controls-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .control-group {
+            background: #ffffff;
+            padding: 22px;
+            border: 1px solid #e8e8e6;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .control-group label {
+            font-family: 'DM Serif Display', serif;
+            font-size: 16px;
+            font-weight: 400;
+            color: #2c2c2c;
+            display: block;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d4d4d0;
+            background-color: #fafaf8;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            color: #2c2c2c;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #999;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #2c2c2c;
+            background-color: #ffffff;
+        }
+
+        .checkbox-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #2c2c2c;
+            border: 1px solid #d4d4d0;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            color: #2c2c2c;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+            margin-top: 8px;
+        }
+
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .btn-export {
+            background: #2c2c2c;
+            color: #ffffff;
+            border: 1px solid #2c2c2c;
+        }
+
+        .btn-export:hover {
+            background: #ffffff;
+            color: #2c2c2c;
+        }
+
+        .btn-export:active {
+            opacity: 0.8;
+        }
+
+        .btn-reset {
+            background: #ffffff;
+            color: #2c2c2c;
+            border: 1px solid #d4d4d0;
+        }
+
+        .btn-reset:hover {
+            border-color: #2c2c2c;
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            margin-top: 10px;
+            display: none;
+            border-radius: 0;
+        }
+
+        .status-message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .status-message.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #f0f0f0;
+            border-top: 2px solid #2c2c2c;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Design Your Rug</h1>
+            <p class="subtitle">CUSTOMIZE YOUR PERFECT COMPOSITION</p>
+        </header>
+
+        <div class="layout">
+            <!-- Preview Section -->
+            <div class="preview-section">
+                <div class="canvas-wrapper">
+                    <div class="canvas-container">
+                        <canvas id="rugCanvas" width="800" height="800"></canvas>
+                    </div>
+                </div>
+
+                <!-- HTML Summary Below Canvas -->
+                <div class="summary-info">
+                    <div class="summary-info-title">Rug Summary</div>
+                    <div class="summary-info-item">
+                        <span class="summary-info-label">Rug Material:</span> 
+                        <span id="htmlMaterial">-</span>
+                    </div>
+                    <div class="summary-info-item">
+                        <span class="summary-info-label">Border:</span> 
+                        <span id="htmlBorder">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Section -->
+            <div class="controls-section">
+                <!-- Border Selection -->
+                <div class="control-group">
+                    <label for="borderSelect">Border</label>
+                    <select id="borderSelect">
+                        <option value="">Select a border style</option>
+                    </select>
+                </div>
+
+                <!-- Material Selection -->
+                <div class="control-group">
+                    <label for="materialSelect">Material</label>
+                    <select id="materialSelect">
+                        <option value="">Select a material</option>
+                    </select>
+                </div>
+
+                <!-- Optional Elements -->
+                <div class="control-group">
+                    <label>Embellishments</label>
+                    <div class="checkbox-container">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="logoCheckbox">
+                            <label for="logoCheckbox">Add Logo</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="infographicCheckbox">
+                            <label for="infographicCheckbox">Add Infographic</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="summaryCheckbox">
+                            <label for="summaryCheckbox">Show Summary on Preview</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group">
+                    <button class="btn-export" id="exportBtn">Export Design</button>
+                    <button class="btn-reset" id="resetBtn">Clear All</button>
+                </div>
+
+                <!-- Status Message -->
+                <div class="status-message" id="statusMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            CANVAS_SIZE: 800,
+            BUCKET_URL: 'https://storage.googleapis.com/rug-builder/rug-builder-preview-images',
+            PATHS: {
+                borders: '/borders/single',
+                materials: '/materials/single',
+                logo: '/optionalElements/bannerLogo.png',
+                infographic: '/optionalElements/infographic.png'
+            }
+        };
+
+        // Border list
+        const BORDERS = [
+            "AL2.png", "AL3.png", "AL4.png", "AL5.png", "AL6.png", "AL8.png",
+            "C1.png", "C10.png", "C11.png", "C17.png", "C20.png", "C22.png", "C23.png", "C26.png", "C29.png", "C30.png", "C31.png", "C32.png", "C33.png", "C37.png", "C38.png", "C39.png", "C41.png", "C42.png", "C43.png", "C45.png", "C46.png", "C47.png", "C49.png", "C50.png", "C51.png", "C52.png", "C6.png", "C7.png", "C8.png",
+            "CCN1.png", "CCN10.png", "CCN14.png", "CCN15.png", "CCN16.png", "CCN17.png", "CCN18.png", "CCN19.png", "CCN2.png", "CCN3.png", "CCN4.png", "CCN6.png", "CCN9.png",
+            "CS01.png", "CS010.png", "CS011.png", "CS012.png", "CS013.png", "CS014.png", "CS015.png", "CS016.png", "CS02.png", "CS03.png", "CS04.png", "CS05.png", "CS06.png", "CS07.png", "CS08.png", "CS09.png",
+            "CS301.png", "CS3010.png", "CS3011.png", "CS3013.png", "CS3014.png", "CS3015.png", "CS3016.png", "CS302.png", "CS303.png", "CS304.png", "CS305.png", "CS306.png", "CS307.png", "CS308.png", "CS309.png",
+            "HL1.png", "HL11.png", "HL12.png", "HL15.png", "HL17.png", "HL18.png", "HL19.png", "HL20.png", "HL21.png", "HL22.png",
+            "LBW50.png", "LBW51.png", "LBW52.png", "LBW53.png", "LBW54.png", "LBW55.png", "LBW56.png", "LBW57.png", "LBW58.png", "LBW59.png",
+            "LSB10.png", "LSB11.png", "LSB12.png", "LSB6.png", "LSB7.png", "LSB8.png", "LSB9.png",
+            "LT1.png", "LT13.png", "LT17.png", "LT18.png", "LT19.png", "LT2.png", "LT20.png", "LT24.png", "LT25.png", "LT26.png", "LT27.png", "LT28.png", "LT29.png", "LT3.png", "LT30.png", "LT31.png", "LT32.png", "LT33.png", "LT34.png", "LT4.png", "LT6.png", "LT8.png",
+            "VL1.png", "VL2.png", "VL3.png", "VL4.png", "VL5.png", "VL6.png",
+            "WFM1.png", "WFM2.png", "WFM3.png", "WFM4.png", "WFM5.png", "WFM6.png", "WFM7.png", "WFM8.png",
+            "WFP1.png", "WFP2.png", "WFP3.png", "WFP4.png", "WFP5.png", "WFP6.png"
+        ];
+
+        // Material list
+        const MATERIALS = [
+            "AL202.png", "AL203.png", "AL204.png", "AL206.png",
+            "BA500.png", "BA501.png", "BA502.png", "BA503.png", "BA504.png", "BA505.png", "BA506.png",
+            "BN-L.png",
+            "BS100.png", "BS102.png", "BS103.png", "BS104.png", "BS105.png", "BS106.png", "BS107.png", "BS114.png", "BS116.png", "BS117.png", "BS118.png", "BS120.png", "BS121.png",
+            "C653.png", "C654.png", "C658.png", "C659.png", "C716.png", "C719.png", "C858.png",
+            "CC981.png", "CC982.png", "CC983.png", "CC988.png", "CC989.png",
+            "CG102.png", "CG103.png", "CG104.png", "CG105.png",
+            "D704.png", "D705.png",
+            "E100.png", "E101.png", "E102.png", "E108.png", "E109.png", "E110.png", "E111.png", "E112.png", "E113.png", "E114.png", "E115.png", "E220.png", "E221.png", "E222.png", "E223.png", "E312.png", "E313.png", "E400.png", "E402.png", "E403.png", "E405.png", "E658.png", "E659.png",
+            "FSBW.png", "FSG.png", "FSGH.png",
+            "GH100.png", "GH101.png", "GH102.png", "GH103.png", "GH104.png", "GH105.png",
+            "GO800.png", "GO801.png", "GO802.png", "GO803.png",
+            "HB254.png", "HB255.png", "HB257.png", "HB259.png", "HB260.png", "HB261.png", "HB264.png", "HB265.png", "HBN-L.png",
+            "HH250.png", "HH254.png", "HH255.png", "HH257.png", "HH259.png", "HH260.png", "HH261.png", "HH264.png", "HH265.png",
+            "IN502.png", "IN504.png",
+            "JT700.png", "JT803.png", "JT900.png",
+            "M602.png", "M604.png", "M606.png", "M607.png", "M805.png", "M806.png", "M807.png", "M808.png", "M809.png",
+            "MP108.png", "MP110.png", "MP112.png", "MP113.png", "MP114.png", "MP115.png", "MP120.png", "MP121.png", "MP123.png",
+            "OP301.png", "OP302.png", "OP303.png", "OP304.png", "OP305.png", "OP306.png",
+            "P1801.png", "P1802.png", "P1803.png", "P1804.png",
+            "P3123.png", "P3124.png", "P3125.png", "P3126.png", "P3127.png", "P3128.png", "P3129.png",
+            "PN-L.png",
+            "RU100.png", "RU101.png", "RU102.png", "RU103.png", "RU104.png",
+            "SBW.png",
+            "SD100.png", "SD101.png", "SD102.png", "SD103.png", "SD104.png", "SD105.png", "SD106.png",
+            "SG.png", "SGH.png",
+            "SM100.png", "SM101.png", "SM102.png", "SM103.png", "SM104.png", "SM105.png",
+            "SN501.png", "SN502.png", "SN503.png", "SN504.png", "SN505.png",
+            "SP300.png", "SP302.png", "SP303.png", "SP304.png",
+            "SR400.png", "SR401.png", "SR402.png",
+            "SV3123.png", "SV3124.png", "SV3125.png", "SV3126.png", "SV3127.png", "SV3128.png", "SV3129.png",
+            "TW110.png", "TW111.png", "TW112.png", "TW113.png",
+            "WA130.png", "WA131.png", "WA132.png", "WA133.png", "WA134.png", "WA135.png", "WA136.png", "WA137.png", "WA138.png", "WA139.png", "WA141.png",
+            "WA500.png", "WA501.png", "WA502.png", "WA504.png", "WA511.png", "WA512.png", "WA513.png", "WA514.png", "WA515.png", "WA516.png", "WA517.png", "WA518.png",
+            "WB101.png", "WB102.png", "WB103.png", "WB104.png", "WB105.png",
+            "WE100.png", "WE101.png", "WE102.png", "WE103.png", "WE104.png", "WE510.png", "WE511.png", "WE512.png", "WE513.png", "WE514.png", "WE515.png", "WE516.png", "WE517.png", "WE518.png",
+            "WFN501.png", "WFN502.png", "WFN503.png", "WFN504.png",
+            "WFS1.png", "WFS2.png", "WFS3.png", "WFS4.png", "WFS5.png", "WFS6.png", "WFS7.png", "WFS8.png",
+            "WFW601.png", "WFW602.png", "WFW603.png", "WFW604.png",
+            "WG100.png", "WG101.png", "WG102.png", "WG103.png", "WG104.png", "WG105.png",
+            "WH200.png", "WH201.png", "WH202.png", "WH204.png", "WH205.png", "WH206.png", "WH207.png",
+            "WJ200.png", "WJ201.png", "WJ202.png", "WJ203.png", "WJ204.png",
+            "WL775.png", "WL776.png", "WL777.png", "WL778.png", "WL779.png",
+            "WP101.png", "WP102.png", "WP103.png", "WP104.png", "WP105.png", "WP106.png", "WP350.png", "WP351.png", "WP352.png", "WP353.png",
+            "WR100.png", "WR101.png", "WR102.png", "WR103.png", "WR104.png", "WR105.png", "WR106.png", "WR107.png", "WR122.png", "WR124.png", "WR129.png", "WR130.png", "WR131.png",
+            "WS100.png", "WS110.png", "WS113.png", "WS114.png", "WS115.png", "WS118.png", "WS119.png", "WS120.png", "WS140.png", "WS148.png", "WS149.png", "WS157.png", "WS222.png", "WS253.png", "WS254.png",
+            "WT500.png", "WT501.png", "WT502.png", "WT503.png", "WT504.png"
+        ];
+
+        // DOM Elements
+        const borderSelect = document.getElementById('borderSelect');
+        const materialSelect = document.getElementById('materialSelect');
+        const logoCheckbox = document.getElementById('logoCheckbox');
+        const infographicCheckbox = document.getElementById('infographicCheckbox');
+        const summaryCheckbox = document.getElementById('summaryCheckbox');
+        const exportBtn = document.getElementById('exportBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const rugCanvas = document.getElementById('rugCanvas');
+        const statusMessage = document.getElementById('statusMessage');
+        const htmlMaterial = document.getElementById('htmlMaterial');
+        const htmlBorder = document.getElementById('htmlBorder');
+
+// Get canvas context with proper color space settings
+const ctx = rugCanvas.getContext('2d', { 
+    alpha: false,
+    colorSpace: 'srgb',
+    willReadFrequently: false
+});
+
+// Keep image smoothing ENABLED for better quality
+ctx.imageSmoothingEnabled = true;
+ctx.imageSmoothingQuality = 'high';
+
+
+        // Initialize
+        function init() {
+            populateSelects();
+            addEventListeners();
+            renderRug();
+        }
+
+        // Populate select dropdowns
+        function populateSelects() {
+            BORDERS.forEach(border => {
+                const option = document.createElement('option');
+                option.value = border;
+                option.textContent = border.replace('.png', '');
+                borderSelect.appendChild(option);
+            });
+
+            MATERIALS.forEach(material => {
+                const option = document.createElement('option');
+                option.value = material;
+                option.textContent = material.replace('.png', '');
+                materialSelect.appendChild(option);
+            });
+        }
+
+        // Add event listeners
+        function addEventListeners() {
+            borderSelect.addEventListener('change', renderRug);
+            materialSelect.addEventListener('change', renderRug);
+            logoCheckbox.addEventListener('change', renderRug);
+            infographicCheckbox.addEventListener('change', renderRug);
+            summaryCheckbox.addEventListener('change', renderRug);
+            exportBtn.addEventListener('click', exportRug);
+            resetBtn.addEventListener('click', resetAll);
+        }
+
+        // Load image directly from bucket
+        function loadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error(`Failed to load: ${url}`));
+                img.src = url;
+            });
+        }
+
+        // Build image URL
+        function buildImageUrl(category, filename) {
+            return `${CONFIG.BUCKET_URL}${CONFIG.PATHS[category]}/${filename}`;
+        }
+
+        // Update HTML summary below canvas
+        function updateHtmlSummary() {
+            const materialName = materialSelect.value ? materialSelect.value.replace('.png', '') : '-';
+            const borderName = borderSelect.value ? borderSelect.value.replace('.png', '') : '-';
+            
+            htmlMaterial.textContent = materialName;
+            htmlBorder.textContent = borderName;
+        }
+
+    async function drawSummaryOnCanvas(targetCtx, size) {
+    if (!summaryCheckbox.checked) return;
+
+    const scale = size / 800;
+    
+    // Refined dimensions
+    const padding = 28 * scale;
+    const boxWidth = 210 * scale;      // Slightly wider
+    const boxHeight = 78 * scale;       // A bit taller
+    const x = padding;
+    const y = padding;
+    const borderRadius = 6 * scale;     // More subtle radius
+
+    targetCtx.save();
+    
+    // Stronger, more defined shadow
+    targetCtx.shadowColor = 'rgba(0, 0, 0, 0.18)';
+    targetCtx.shadowBlur = 16 * scale;
+    targetCtx.shadowOffsetX = 0;
+    targetCtx.shadowOffsetY = 4 * scale;
+    
+    // Pure white background
+    targetCtx.fillStyle = '#ffffff';
+    targetCtx.beginPath();
+    targetCtx.moveTo(x + borderRadius, y);
+    targetCtx.lineTo(x + boxWidth - borderRadius, y);
+    targetCtx.quadraticCurveTo(x + boxWidth, y, x + boxWidth, y + borderRadius);
+    targetCtx.lineTo(x + boxWidth, y + boxHeight - borderRadius);
+    targetCtx.quadraticCurveTo(x + boxWidth, y + boxHeight, x + boxWidth - borderRadius, y + boxHeight);
+    targetCtx.lineTo(x + borderRadius, y + boxHeight);
+    targetCtx.quadraticCurveTo(x, y + boxHeight, x, y + boxHeight - borderRadius);
+    targetCtx.lineTo(x, y + borderRadius);
+    targetCtx.quadraticCurveTo(x, y, x + borderRadius, y);
+    targetCtx.closePath();
+    targetCtx.fill();
+
+    targetCtx.shadowColor = 'transparent';
+
+    const innerPadding = 16 * scale;   // More generous padding
+    const textX = x + innerPadding;
+    let textY = y + innerPadding;
+
+    // Title with better contrast
+    targetCtx.font = `600 ${9 * scale}px Montserrat, sans-serif`;
+    targetCtx.fillStyle = '#888888';   // Slightly darker gray
+    targetCtx.textBaseline = 'top';
+    targetCtx.letterSpacing = `${1 * scale}px`;
+    targetCtx.fillText('RUG SUMMARY', textX, textY);
+    
+    textY += 16 * scale;
+
+    // More visible separator with subtle gradient effect
+    targetCtx.strokeStyle = '#d4d4d0';  // Slightly darker
+    targetCtx.lineWidth = 1 * scale;
+    targetCtx.beginPath();
+    targetCtx.moveTo(textX, textY);
+    targetCtx.lineTo(x + boxWidth - innerPadding, textY);
+    targetCtx.stroke();
+
+    textY += 12 * scale;
+
+    const materialName = materialSelect.value ? materialSelect.value.replace('.png', '') : '-';
+    const borderName = borderSelect.value ? borderSelect.value.replace('.png', '') : '-';
+
+    // Better label/value contrast
+    targetCtx.font = `600 ${11 * scale}px Montserrat, sans-serif`;
+    targetCtx.fillStyle = '#555555';   // Darker label
+    targetCtx.fillText('Material: ', textX, textY);
+    
+    const labelWidth = targetCtx.measureText('Material: ').width;
+    targetCtx.font = `500 ${11 * scale}px Montserrat, sans-serif`;  // Medium weight for value
+    targetCtx.fillStyle = '#1a1a1a';   // Darker value
+    targetCtx.fillText(materialName, textX + labelWidth, textY);
+
+    textY += 17 * scale;  // Better spacing
+
+    targetCtx.font = `600 ${11 * scale}px Montserrat, sans-serif`;
+    targetCtx.fillStyle = '#555555';
+    targetCtx.fillText('Border: ', textX, textY);
+    
+    const borderLabelWidth = targetCtx.measureText('Border: ').width;
+    targetCtx.font = `500 ${11 * scale}px Montserrat, sans-serif`;
+    targetCtx.fillStyle = '#1a1a1a';
+    targetCtx.fillText(borderName, textX + borderLabelWidth, textY);
+
+    targetCtx.restore();
+}
+
+
+        // Render rug composition
+        async function renderRug() {
+            try {
+                const images = [];
+
+                // Layer 1: Material
+                if (materialSelect.value) {
+                    const materialUrl = buildImageUrl('materials', materialSelect.value);
+                    const materialImg = await loadImage(materialUrl);
+                    images.push({ img: materialImg, name: 'material' });
+                }
+
+                // Layer 2: Border
+                if (borderSelect.value) {
+                    const borderUrl = buildImageUrl('borders', borderSelect.value);
+                    const borderImg = await loadImage(borderUrl);
+                    images.push({ img: borderImg, name: 'border' });
+                }
+
+                // Layer 3: Logo (optional)
+                if (logoCheckbox.checked) {
+                    const logoUrl = `${CONFIG.BUCKET_URL}${CONFIG.PATHS.logo}`;
+                    const logoImg = await loadImage(logoUrl);
+                    images.push({ img: logoImg, name: 'logo' });
+                }
+
+                // Layer 4: Infographic (optional)
+                if (infographicCheckbox.checked) {
+                    const infographicUrl = `${CONFIG.BUCKET_URL}${CONFIG.PATHS.infographic}`;
+                    const infographicImg = await loadImage(infographicUrl);
+                    images.push({ img: infographicImg, name: 'infographic' });
+                }
+
+                // Draw on canvas at native 800x800 resolution
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, CONFIG.CANVAS_SIZE, CONFIG.CANVAS_SIZE);
+                
+                images.forEach(({ img }) => {
+                    ctx.drawImage(img, 0, 0, CONFIG.CANVAS_SIZE, CONFIG.CANVAS_SIZE);
+                });
+
+                // Draw summary if enabled
+                await drawSummaryOnCanvas(ctx, CONFIG.CANVAS_SIZE);
+
+                // Update HTML summary below canvas
+                updateHtmlSummary();
+
+                hideStatus();
+            } catch (error) {
+                console.error('Error rendering rug:', error);
+                showStatus(`Error: ${error.message}`, 'error');
+            }
+        }
+
+// Export as PNG at 800x800 with proper color management
+async function exportRug() {
+    try {
+        exportBtn.disabled = true;
+        exportBtn.innerHTML = '<span class="loading"></span>Exporting...';
+
+        // Small delay to ensure canvas is fully rendered
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Create a new canvas to ensure clean export without color management issues
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = CONFIG.CANVAS_SIZE;
+        exportCanvas.height = CONFIG.CANVAS_SIZE;
+        const exportCtx = exportCanvas.getContext('2d', {
+            alpha: false,
+            colorSpace: 'srgb',
+            willReadFrequently: false
+        });
+        
+        // Copy the main canvas to export canvas
+        exportCtx.drawImage(rugCanvas, 0, 0);
+
+        // Export with specific settings to preserve colors
+        exportCanvas.toBlob((blob) => {
+            if (!blob) {
+                throw new Error('Failed to generate image');
+            }
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            
+            // Generate filename with timestamp
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+            const material = materialSelect.value.replace('.png', '') || 'no-material';
+            const border = borderSelect.value.replace('.png', '') || 'no-border';
+            link.download = `rug-${material}-${border}-${timestamp}.png`;
+            
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            exportBtn.disabled = false;
+            exportBtn.innerHTML = 'Export Design';
+            showStatus('Design exported successfully!', 'success');
+        }, 'image/png', 1.0); // Maximum quality
+
+    } catch (error) {
+        console.error('Error exporting rug:', error);
+        showStatus(`Export error: ${error.message}`, 'error');
+        exportBtn.disabled = false;
+        exportBtn.innerHTML = 'Export Design';
+    }
+}
+
+
+        // Reset all selections
+        function resetAll() {
+            borderSelect.value = '';
+            materialSelect.value = '';
+            logoCheckbox.checked = false;
+            infographicCheckbox.checked = false;
+            summaryCheckbox.checked = false;
+            renderRug();
+            hideStatus();
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type}`;
+            statusMessage.style.display = 'block';
+            if (type === 'success') {
+                setTimeout(hideStatus, 3000);
+            }
+        }
+
+        // Hide status message
+        function hideStatus() {
+            statusMessage.style.display = 'none';
+            statusMessage.className = 'status-message';
+        }
+
+        // Start the application
+        init();
+    </script>
+</body>
+</html>
+
