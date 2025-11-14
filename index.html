@@ -463,6 +463,43 @@
             "WT500.png", "WT501.png", "WT502.png", "WT503.png", "WT504.png"
         ];
 
+        // Natural sort comparator for filenames (groups by prefix, sorts numbers numerically)
+        function compareFilenames(a, b) {
+            const cleanA = a.replace('.png', '');
+            const cleanB = b.replace('.png', '');
+
+            const matchA = cleanA.match(/^([A-Z]+)([0-9]+)(.*)$/);
+            const matchB = cleanB.match(/^([A-Z]+)([0-9]+)(.*)$/);
+
+            if (matchA && matchB) {
+                const prefixA = matchA[1];
+                const numA = parseInt(matchA[2]);
+                const suffixA = matchA[3] || '';
+
+                const prefixB = matchB[1];
+                const numB = parseInt(matchB[2]);
+                const suffixB = matchB[3] || '';
+
+                if (prefixA !== prefixB) {
+                    return prefixA.localeCompare(prefixB);
+                }
+                if (numA !== numB) {
+                    return numA - numB;
+                }
+                return suffixA.localeCompare(suffixB);
+            } else if (matchA) {
+                return cleanA.localeCompare(cleanB);
+            } else if (matchB) {
+                return cleanB.localeCompare(cleanA);
+            } else {
+                return cleanA.localeCompare(cleanB);
+            }
+        }
+
+        // Sort the arrays for natural ordering
+        BORDERS.sort(compareFilenames);
+        MATERIALS.sort(compareFilenames);
+
         // DOM Elements
         const borderSelect = document.getElementById('borderSelect');
         const materialSelect = document.getElementById('materialSelect');
@@ -780,5 +817,3 @@ async function exportRug() {
     </script>
 </body>
 </html>
-
-
